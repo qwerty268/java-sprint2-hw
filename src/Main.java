@@ -1,5 +1,9 @@
+import tracker.model.Task;
+import tracker.service.TaskManager;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Пришло время практики!");
+        TaskManager manager = new TaskManager();
+
     }
 }
