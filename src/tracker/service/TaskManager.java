@@ -18,6 +18,7 @@ public class TaskManager {
     private HashMap<Long, Epic> epics = new HashMap<>();
     private HashMap<Long, SubTask> subtasks = new HashMap<>();
 
+    //возвращает список задач
     public ArrayList<Task> getTasks() {
         ArrayList<Task> arrayOfTasks = new ArrayList<>();
 
@@ -28,9 +29,12 @@ public class TaskManager {
             return arrayOfTasks;
         }
 
-        return null;
+        System.out.println("Задач нет");
+
+        return arrayOfTasks;
     }
 
+    //возвращает список эпиков
     public ArrayList<Task> getEpics() {
         ArrayList<Task> arrayOfEpics = new ArrayList<>();
 
@@ -41,9 +45,11 @@ public class TaskManager {
             return arrayOfEpics;
         }
 
-        return null;
+        System.out.println("Нет епиков");
+        return arrayOfEpics;
     }
 
+    //возвращает список подзадач эпика
     public ArrayList<SubTask> getSubTasksOfEpic(Long epicId) {
         if (epics.get(epicId) == null) {
             return null;
@@ -52,7 +58,8 @@ public class TaskManager {
         return epics.get(epicId).getSubTasks();
     }
 
-    public void add(Task task) {
+    //добавляет задачу любого типа
+    public void addAnyTypeOfTask(Task task) {
         if (task == null) {
             return;
         }
@@ -71,7 +78,8 @@ public class TaskManager {
 
     }
 
-    public void update(Task task) {
+    //обновляет задачу любого вида
+    public void updateTask(Task task) {
         if (task.getClass() == Task.class) {
             tasks.put(task.getTaskId(), task);
         }
@@ -102,12 +110,14 @@ public class TaskManager {
         }
     }
 
+    //удаляет все задачи
     public void deleteAll() {
         tasks.clear();
         epics.clear();
         subtasks.clear();
     }
 
+    //удаляет задачу любого типа по индексу
     public void deleteByIndex(long index) {
         if (tasks.get(index) != null) {
             tasks.remove(index);
