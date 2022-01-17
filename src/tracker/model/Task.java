@@ -1,7 +1,7 @@
 package tracker.model;
 
 public class Task {
-    protected String Status;
+    protected Status status;
     protected String Name;
     protected String Description;
     protected Long taskId;
@@ -26,11 +26,11 @@ public class Task {
         this.Name = name;
     }
 
-    public String getStatus(){
-        return Status;
+    public Status getStatus(){
+        return status;
     }
 
-    public void setStatus(String status) {
-        Status = status;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

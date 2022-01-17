@@ -1,9 +1,8 @@
-import tracker.model.Task;
-import tracker.service.TaskManager;
+import tracker.service.InMemoryTasksManager;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager manager = new TaskManager();
+        InMemoryTasksManager manager = new InMemoryTasksManager();
 
     }
 }
