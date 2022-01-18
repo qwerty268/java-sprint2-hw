@@ -62,7 +62,7 @@ public class InMemoryTasksManager implements TaskManager {
         if (task == null) {
             return;
         }
-        task.setTaskId(getNewId());
+
         if (task.getClass() == Task.class) {
             tasks.put(task.getTaskId(), task);
         }

@@ -6,8 +6,11 @@ public class Task {
     protected String Description;
     protected Long taskId;
 
-    public Task(long id) {
+    public Task(long id, String Name, String Description, Status status) {
         this.taskId = id;
+        this.Name = Name;
+        this.Description = Description;
+        this.status = status;
     }
 
     public Long getTaskId() {
