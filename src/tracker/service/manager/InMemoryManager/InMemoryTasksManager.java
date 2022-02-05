@@ -1,15 +1,22 @@
-package tracker.service;
+package tracker.service.manager.InMemoryManager;
 
 import tracker.model.Epic;
 import tracker.model.Status;
 import tracker.model.SubTask;
 import tracker.model.Task;
+import tracker.service.manager.HistoryManager;
+import tracker.service.manager.TaskManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InMemoryTasksManager implements TaskManager {
-    long newId = 0;
+    static long newId = 0;
+    private InMemoryHistoryManager historyManager;
+
+    public InMemoryTasksManager(InMemoryHistoryManager historyManager){
+        this.historyManager = historyManager;
+    }
 
     public long getNewId() {
         return ++newId;
@@ -18,7 +25,6 @@ public class InMemoryTasksManager implements TaskManager {
     private HashMap<Long, Task> tasks = new HashMap<>();
     private HashMap<Long, Epic> epics = new HashMap<>();
     private HashMap<Long, SubTask> subtasks = new HashMap<>();
-    private ArrayList<Task> historyList = new ArrayList<>();
 
     public ArrayList<Task> getTasks() {
         ArrayList<Task> arrayOfTasks = new ArrayList<>();
@@ -111,8 +117,13 @@ public class InMemoryTasksManager implements TaskManager {
 
     @Override
     public void deleteAll() {
+        for (Long id : tasks.keySet()) historyManager.remove(id);
         tasks.clear();
+
+        for (Long id : epics.keySet()) historyManager.remove(id);
         epics.clear();
+
+        for (Long id : subtasks.keySet()) historyManager.remove(id);
         subtasks.clear();
     }
 
@@ -120,41 +131,40 @@ public class InMemoryTasksManager implements TaskManager {
     public void deleteByIndex(long index) {
         if (tasks.get(index) != null) {
             tasks.remove(index);
+
+            historyManager.remove(index);
         }
 
         if (epics.get(index) != null) {
             epics.get(index).clearSubTasks();
             epics.remove(index);
+
+            historyManager.remove(index);
         }
 
         if (subtasks.get(index) != null) {
             subtasks.remove(index);
+
+            historyManager.remove(index);
         }
 
     }
 
     public SubTask getSubTask(long subTaskId) {
-        if (subtasks.containsKey(subTaskId)) {
-            historyList.add(0, subtasks.get(subTaskId));
-            if (historyList.size() == 11) {
-                historyList.remove(10);
-            }
-        }
+        historyManager.add(subtasks.get(subTaskId));
         return subtasks.get(subTaskId);
     }
 
     public Epic getEpic(long epicId) {
-        if (epics.containsKey(epicId)) {
-            historyList.add(0, epics.get(epicId));
-            if (historyList.size() == 11) {
-                historyList.remove(10);
-            }
-        }
+        historyManager.add(epics.get(epicId));
         return epics.get(epicId);
     }
 
-    @Override
-    public ArrayList<Task> history() {
-        return historyList;
+    public Task getTask(long taskId) {
+        historyManager.add(tasks.get(taskId));
+        return tasks.get(taskId);
+
     }
+
+
 }

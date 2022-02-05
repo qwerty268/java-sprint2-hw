@@ -1,4 +1,4 @@
-package tracker.service;
+package tracker.service.manager;
 
 import tracker.model.SubTask;
 import tracker.model.Task;
@@ -21,5 +21,4 @@ public interface TaskManager {
     public void deleteByIndex(long index);
 
     //возвращает истоирю последних 10 просмотренных задач
-    public ArrayList<Task> history();
 }
