@@ -1,10 +1,9 @@
-package tracker.service.manager.InMemoryManager;
+package tracker.service.manager.inMemoryManager;
 
 import tracker.model.Epic;
 import tracker.model.Status;
 import tracker.model.SubTask;
 import tracker.model.Task;
-import tracker.service.manager.HistoryManager;
 import tracker.service.manager.TaskManager;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.HashMap;
 
 public class InMemoryTasksManager implements TaskManager {
     static long newId = 0;
-    private InMemoryHistoryManager historyManager;
+    public InMemoryHistoryManager historyManager;
 
     public InMemoryTasksManager(InMemoryHistoryManager historyManager){
         this.historyManager = historyManager;
@@ -136,10 +135,10 @@ public class InMemoryTasksManager implements TaskManager {
         }
 
         if (epics.get(index) != null) {
+            historyManager.remove(index);
+
             epics.get(index).clearSubTasks();
             epics.remove(index);
-
-            historyManager.remove(index);
         }
 
         if (subtasks.get(index) != null) {

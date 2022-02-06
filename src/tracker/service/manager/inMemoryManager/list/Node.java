@@ -1,4 +1,4 @@
-package tracker.service.manager.InMemoryManager.List;
+package tracker.service.manager.inMemoryManager.list;
 
 import tracker.model.Task;
 

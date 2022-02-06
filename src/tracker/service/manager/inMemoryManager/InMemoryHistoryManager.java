@@ -1,8 +1,8 @@
-package tracker.service.manager.InMemoryManager;
+package tracker.service.manager.inMemoryManager;
 
 import tracker.model.Task;
 import tracker.service.manager.HistoryManager;
-import tracker.service.manager.InMemoryManager.List.LinkedList;
+import tracker.service.manager.inMemoryManager.list.LinkedList;
 
 import java.util.List;
 

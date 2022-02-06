@@ -2,10 +2,9 @@ import tracker.model.Epic;
 import tracker.model.Status;
 import tracker.model.SubTask;
 import tracker.model.Task;
-import tracker.service.manager.InMemoryManager.InMemoryHistoryManager;
-import tracker.service.manager.InMemoryManager.InMemoryTasksManager;
+import tracker.service.manager.inMemoryManager.InMemoryHistoryManager;
+import tracker.service.manager.inMemoryManager.InMemoryTasksManager;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,57 +15,57 @@ public class Main {
         InMemoryTasksManager manager = new InMemoryTasksManager(historyManager);
 
         List<Task> story;
-        /*
-        Task task1 = new Task(1,"task1","task1", Status.DONE);
-        Task task2 = new Task(2,"task2","task2",Status.DONE);
 
-        //проверка на 2 задачи:
+        Task task1 = new Task(1, "task1", "task1", Status.DONE);
+        Task task2 = new Task(2, "task2", "task2", Status.DONE);
+
+        SubTask subTask3 = new SubTask(3, "subTask3", "subtask3", Status.DONE);
+        SubTask subTask4 = new SubTask(4, "subTask4", "subTask4", Status.NEW);
+        SubTask subTask5 = new SubTask(5, "subTask5", "subTask5", Status.NEW);
+
+        Epic epic0 = new Epic(0, "epic0", "epic0", Status.NEW, new ArrayList<>(List.of(subTask3, subTask4, subTask5)));
+
+        Epic epic6 = new Epic(6, "epic6", "epic6", Status.NEW, null);
+
+
         manager.addAnyTypeOfTask(task1);
         manager.addAnyTypeOfTask(task2);
 
         manager.getTask(task1.getTaskId());
         manager.getTask(task2.getTaskId());
 
-        story = manager.historyManager.getHistory();
-        System.out.println(story.toString());
-
-        manager.getTask(task1.getTaskId());
-
-        story = manager.historyManager.getHistory();
-
-        System.out.println(story.toString());
-
-        manager.deleteAll();
-
-        story = manager.historyManager.getHistory();
-
-        System.out.println(story.toString());
-        */
-
-
-        SubTask subTask1 = new SubTask(1,"subTask1", "subtask1", Status.DONE);
-        SubTask subTask2 = new SubTask(2, "subTask2", "subTask2", Status.NEW);
-        SubTask subTask3 = new SubTask(3, "subTask3", "subTask3", Status.NEW);
-
-        Epic epic0 = new Epic(0, "epic0", "epic0", Status.NEW, new ArrayList<>(List.of(subTask1, subTask2, subTask3)));
-
-        manager.addAnyTypeOfTask(subTask1);
-        manager.addAnyTypeOfTask(subTask2);
         manager.addAnyTypeOfTask(subTask3);
+        manager.addAnyTypeOfTask(subTask4);
+        manager.addAnyTypeOfTask(subTask5);
 
         manager.addAnyTypeOfTask(epic0);
+        manager.addAnyTypeOfTask(epic6);
 
-        manager.getSubTask(1);
-        manager.getSubTask(2);
         manager.getSubTask(3);
+        manager.getSubTask(4);
+        manager.getSubTask(5);
         manager.getEpic(0);
+        manager.getEpic(6);
 
-        story = historyManager.getHistory();
+
+        story = manager.historyManager.getHistory();
+
         System.out.println(story.toString());
+        System.out.println();
 
-        historyManager.remove(0);
 
-        story = historyManager.getHistory();
+        manager.getTask(task1.getTaskId());
+        manager.deleteByIndex(task2.getTaskId());
+
+        story = manager.historyManager.getHistory();
+
+        System.out.println(story.toString());
+        System.out.println();
+
+
+        manager.deleteByIndex(0);
+
+        story = manager.historyManager.getHistory();
 
         System.out.println(story.toString());
     }
