@@ -10,28 +10,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InMemoryTasksManager implements TaskManager {
-    static long newId = 0;
     public InMemoryHistoryManager historyManager;
 
-    public InMemoryTasksManager(InMemoryHistoryManager historyManager){
+    public InMemoryTasksManager(InMemoryHistoryManager historyManager) {
         this.historyManager = historyManager;
     }
 
-    public long getNewId() {
-        return ++newId;
-    }
 
-    private HashMap<Long, Task> tasks = new HashMap<>();
-    private HashMap<Long, Epic> epics = new HashMap<>();
-    private HashMap<Long, SubTask> subtasks = new HashMap<>();
+    final protected HashMap<Long, Task> tasks = new HashMap<>();
+    final protected HashMap<Long, Epic> epics = new HashMap<>();
+    final protected HashMap<Long, SubTask> subtasks = new HashMap<>();
 
     public ArrayList<Task> getTasks() {
         ArrayList<Task> arrayOfTasks = new ArrayList<>();
 
         if (!tasks.isEmpty()) {
-            for (Task i : tasks.values()) {
-                arrayOfTasks.add(i);
-            }
+            arrayOfTasks.addAll(tasks.values());
             return arrayOfTasks;
         }
 
@@ -44,13 +38,23 @@ public class InMemoryTasksManager implements TaskManager {
         ArrayList<Task> arrayOfEpics = new ArrayList<>();
 
         if (!epics.isEmpty()) {
-            for (Task i : epics.values()) {
-                arrayOfEpics.add(i);
-            }
+            arrayOfEpics.addAll(epics.values());
             return arrayOfEpics;
         }
 
         System.out.println("Нет епиков");
+        return arrayOfEpics;
+    }
+
+    public ArrayList<Task> getSubtasks() {
+        ArrayList<Task> arrayOfEpics = new ArrayList<>();
+
+        if (!subtasks.isEmpty()) {
+            arrayOfEpics.addAll(subtasks.values());
+            return arrayOfEpics;
+        }
+
+        System.out.println("Нет subtasks");
         return arrayOfEpics;
     }
 
@@ -94,7 +98,7 @@ public class InMemoryTasksManager implements TaskManager {
             boolean isDone = true;
             int numOfDone = 0;
             for (SubTask i : subT) {
-                if (i.getStatus().equals("NEW")) {
+                if (i.getStatus() == Status.valueOf("NEW")) {
                     isDone = false;
                 } else {
                     numOfDone += 1;
@@ -136,6 +140,10 @@ public class InMemoryTasksManager implements TaskManager {
 
         if (epics.get(index) != null) {
             historyManager.remove(index);
+
+            for (Task subTask: epics.get(index).getSubTasks()) {
+                subtasks.remove(subTask.getTaskId());
+            }
 
             epics.get(index).clearSubTasks();
             epics.remove(index);

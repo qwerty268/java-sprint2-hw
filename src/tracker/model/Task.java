@@ -29,7 +29,7 @@ public class Task {
         this.Name = name;
     }
 
-    public Status getStatus(){
+    public Status getStatus() {
         return status;
     }
 
@@ -39,11 +39,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "status=" + status +
-                ", Name='" + Name + '\'' +
-                ", Description='" + Description + '\'' +
-                ", taskId=" + taskId +
-                '}';
+        return String.join(",", taskId + "", Type.TASK + "", Name, status + "", Description);
     }
 }

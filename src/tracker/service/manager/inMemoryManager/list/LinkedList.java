@@ -18,7 +18,7 @@ public class LinkedList {
         lastNode = newNode;
 
         //проверка на наличие повторяющихся задач
-        if (nodes.get(task.getTaskId()) != null){
+        if (nodes.get(task.getTaskId()) != null) {
             this.removeNode(newNode.task.getTaskId());
         }
 
@@ -49,12 +49,12 @@ public class LinkedList {
         nodes.remove(id);
 
         // если lastNode заменить на previousNode, то в методе linkedLast, при создании нового узла, за место предыдущего будет передан null
-        if (lastNode == node){
+        if (lastNode == node) {
             lastNode = null;
         }
 
-        if (node.task.getClass() == Epic.class){
-            for (Task subTask: ((Epic) node.task).getSubTasks()) {
+        if (node.task.getClass() == Epic.class) {
+            for (Task subTask : ((Epic) node.task).getSubTasks()) {
                 this.removeNode(subTask.getTaskId());
             }
         }
