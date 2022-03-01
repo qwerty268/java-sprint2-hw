@@ -1,9 +1,6 @@
 package tracker.service.manager;
 
-import tracker.model.SubTask;
 import tracker.model.Task;
-
-import java.util.ArrayList;
 
 public interface TaskManager {
 
