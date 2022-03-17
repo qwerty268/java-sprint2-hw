@@ -1,9 +1,10 @@
-id,type,name,status,description,epic
-1,TASK,task1,DONE,task1
-2,TASK,task2,DONE,task2
+id,type,name,status,description,epic,duration,LocalDate
+1,TASK,task1,DONE,task1,10,11.11.17
+2,TASK,task2,DONE,task2,10,11.11.16
 0,EPIC,epic0,NEW,epic0,3,4,5
-3,SUBTASK,subTask3,DONE,subtask3
-4,SUBTASK,subTask4,NEW,subTask4
-5,SUBTASK,subTask5,NEW,subTask5
+6,EPIC,epic6,NEW,epic6,null
+3,SUBTASK,subTask3,DONE,subtask3,10,11.11.15
+4,SUBTASK,subTask4,NEW,subTask4,10,11.11.17
+5,SUBTASK,subTask5,NEW,subTask5,10,11.11.17
 
-0,5,4,3,2,1
+null

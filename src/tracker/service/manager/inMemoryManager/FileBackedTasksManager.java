@@ -4,6 +4,8 @@ import tracker.exception.ManagerSaveException;
 import tracker.model.*;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,14 +15,24 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
         FileBackedTasksManager manager = new FileBackedTasksManager(new File("info"));
 
 
-        Task task1 = new Task(1, "task1", "task1", Status.DONE);
-        Task task2 = new Task(2, "task2", "task2", Status.DONE);
+        Task task1 = new Task(1, "task1", "task1", Status.DONE, Duration.ofSeconds(10),
+                LocalDate.of(2017, 11, 11));
 
-        SubTask subTask3 = new SubTask(3, "subTask3", "subtask3", Status.DONE);
-        SubTask subTask4 = new SubTask(4, "subTask4", "subTask4", Status.NEW);
-        SubTask subTask5 = new SubTask(5, "subTask5", "subTask5", Status.NEW);
+        Task task2 = new Task(2, "task2", "task2", Status.DONE, Duration.ofSeconds(10),
+                LocalDate.of(2016, 11, 11));
 
-        Epic epic0 = new Epic(0, "epic0", "epic0", Status.NEW, new ArrayList<>(List.of(subTask3, subTask4, subTask5)));
+
+        SubTask subTask3 = new SubTask(3, "subTask3", "subtask3", Status.DONE, Duration.ofSeconds(10),
+                LocalDate.of(2015, 11, 11));
+
+        SubTask subTask4 = new SubTask(4, "subTask4", "subTask4", Status.NEW, Duration.ofSeconds(10),
+                LocalDate.of(2017, 11, 11));
+
+        SubTask subTask5 = new SubTask(5, "subTask5", "subTask5", Status.NEW, Duration.ofSeconds(10),
+                LocalDate.of(2017, 11, 11));
+
+        Epic epic0 = new Epic(0, "epic0", "epic0", Status.NEW,
+                new ArrayList<>(List.of(subTask3, subTask4, subTask5)));
 
         Epic epic6 = new Epic(6, "epic6", "epic6", Status.NEW, null);
 
@@ -44,6 +56,7 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
         manager.getEpic(0);
         manager.getEpic(6);
 
+
         System.out.println("Все таски: " + manager.getTasks().toString() + " " + manager.getEpics().toString() + " " +
                 manager.getSubtasks().toString());
 
@@ -56,10 +69,12 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
                 " " + newManager.getSubtasks().toString());
 
         System.out.println("История: " + newManager.historyManager.getHistory().toString());
+
+newManager.getPrioritizedTasks();
     }
 
 
-    private File file;
+    private final File file;
 
     public FileBackedTasksManager(File file) {
         this.file = file;
@@ -122,7 +137,7 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
         try (Writer fileWriter = new FileWriter(file, false)) {
 
 
-            fileWriter.write("id,type,name,status,description,epic\n");
+            fileWriter.write("id,type,name,status,description,epic,duration,LocalDate\n");
 
             if (!tasks.isEmpty()) {
                 for (Task task : tasks.values()) {
@@ -178,8 +193,7 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
             }
 
             for (String[] valueOfEpic : epicInfo) {
-                Epic epic = makeEpicWithString(valueOfEpic);
-                epics.put(epic.getTaskId(), epic);
+                makeEpicWithString(valueOfEpic);
             }
 
             if (br.ready()) {
@@ -236,17 +250,18 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
 
         switch (Type.valueOf(value[1])) {
             case TASK:
-                Task task = new Task(Long.valueOf(value[0]), value[2], value[4], Status.valueOf(value[3]));
-                tasks.put(task.getTaskId(), task);
+                 addAnyTypeOfTask(new Task(Long.parseLong(value[0]), value[2], value[4], Status.valueOf(value[3]),
+                        Duration.ofSeconds(Long.parseLong(value[5])), LocalDate.parse(value[6], Task.dateTimeFormatter)));                                                                  //!!!!!
                 break;
             case SUBTASK:
-                SubTask subTask = new SubTask(Long.valueOf(value[0]), value[2], value[4], Status.valueOf(value[3]));
-                subtasks.put(subTask.getTaskId(), subTask);
+                addAnyTypeOfTask(new SubTask(Long.parseLong(value[0]), value[2], value[4], Status.valueOf(value[3]),
+                        Duration.ofSeconds(Long.parseLong(value[5])),
+                        LocalDate.parse(value[6], Task.dateTimeFormatter)));
         }
 
     }
 
-    private Epic makeEpicWithString(String[] value) {
+    private void makeEpicWithString(String[] value) {
         ArrayList<SubTask> subTasks = null;
 
         if (!value[5].equals("null")) {
@@ -256,6 +271,6 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
             }
         }
 
-        return new Epic(Long.valueOf(value[0]), value[2], value[4], Status.valueOf(value[3]), subTasks);
+        addAnyTypeOfTask(new Epic(Long.parseLong(value[0]), value[2], value[4], Status.valueOf(value[3]), subTasks));                                                                          //!!!!!!!!
     }
 }
