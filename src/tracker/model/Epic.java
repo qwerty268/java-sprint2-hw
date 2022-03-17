@@ -64,16 +64,21 @@ public class Epic extends Task {
         }
         boolean isDone = true;
         int numOfDone = 0;
+        int numOfInProgress = 0;
         for (SubTask i : subTasks) {
-            if (i.getStatus() == Status.valueOf("NEW")) {
+            if (i.getStatus() == Status.NEW || i.getStatus() == Status.IN_PROGRESS) {
                 isDone = false;
-            } else {
-                numOfDone += 1;
+            }
+            if (i.getStatus() == Status.IN_PROGRESS) {
+                numOfInProgress++;
+            }
+            if (i.getStatus() == Status.DONE) {
+                numOfDone++;
             }
         }
         if (isDone) {
             this.setStatus(Status.DONE);
-        } else if (numOfDone == 0) {
+        } else if (numOfDone == 0 && numOfInProgress == 0) {
             this.setStatus(Status.NEW);
         } else {
             this.setStatus(Status.IN_PROGRESS);

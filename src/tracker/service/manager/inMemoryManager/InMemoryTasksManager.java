@@ -76,9 +76,11 @@ public class InMemoryTasksManager implements TaskManager {
         if (task == null) {
             return;
         }
-
-        doTheyOverlapInTime(task);
-
+        if (!tasks.containsKey(task.getTaskId()) &&
+                !tasks.containsKey(task.getTaskId()) &&
+                !tasks.containsKey(task.getTaskId())) {
+            doTheyOverlapInTime(task);
+        }
         if (task.getClass() == Task.class) {
             tasks.put(task.getTaskId(), task);
         }
@@ -187,7 +189,7 @@ public class InMemoryTasksManager implements TaskManager {
     }
 
     //проверяет на пересечение по времени исполнения
-    public void doTheyOverlapInTime(Task task) throws IllegalArgumentException {
+    private void doTheyOverlapInTime(Task task) throws IllegalArgumentException {
         if (task.getClass() == Epic.class) {
             return;
         }

@@ -24,6 +24,7 @@ public class LinkedList {
 
         if (nodes.isEmpty()) {
             nodes.put(task.getTaskId(), newNode);
+            newNode.previous = null;
             previousNode = newNode;
         } else {
             nodes.put(task.getTaskId(), newNode);
@@ -50,7 +51,8 @@ public class LinkedList {
 
         // если lastNode заменить на previousNode, то в методе linkedLast, при создании нового узла, за место предыдущего будет передан null
         if (lastNode == node) {
-            lastNode = null;
+            lastNode = node.previous;
+            previousNode = lastNode;
         }
 
         if (node.task.getClass() == Epic.class) {
