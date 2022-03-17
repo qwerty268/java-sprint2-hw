@@ -5,7 +5,7 @@ import tracker.model.*;
 
 import java.io.*;
 import java.time.Duration;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,25 +16,25 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
 
 
         Task task1 = new Task(1, "task1", "task1", Status.DONE, Duration.ofSeconds(10),
-                LocalDate.of(2017, 11, 11));
+                LocalDateTime.of(2017, 11, 11, 1, 1));
 
         Task task2 = new Task(2, "task2", "task2", Status.DONE, Duration.ofSeconds(10),
-                LocalDate.of(2016, 11, 11));
+                LocalDateTime.of(2018, 11, 11, 1, 1));
 
 
         SubTask subTask3 = new SubTask(3, "subTask3", "subtask3", Status.DONE, Duration.ofSeconds(10),
-                LocalDate.of(2015, 11, 11));
+                LocalDateTime.of(2019, 11, 11, 1, 1));
 
-        SubTask subTask4 = new SubTask(4, "subTask4", "subTask4", Status.NEW, Duration.ofSeconds(10),
-                LocalDate.of(2017, 11, 11));
+        SubTask subTask4 = new SubTask(4, "subTask4", "subTask4", Status.DONE, Duration.ofSeconds(10),
+                LocalDateTime.of(2010, 11, 11, 1, 1));
 
-        SubTask subTask5 = new SubTask(5, "subTask5", "subTask5", Status.NEW, Duration.ofSeconds(10),
-                LocalDate.of(2017, 11, 11));
+        SubTask subTask5 = new SubTask(5, "subTask5", "subTask5", Status.DONE, Duration.ofSeconds(10),
+                LocalDateTime.of(2015, 11, 11, 1, 1));
 
-        Epic epic0 = new Epic(0, "epic0", "epic0", Status.NEW,
+        Epic epic0 = new Epic(0, "epic0", "epic0", null,
                 new ArrayList<>(List.of(subTask3, subTask4, subTask5)));
 
-        Epic epic6 = new Epic(6, "epic6", "epic6", Status.NEW, null);
+        Epic epic6 = new Epic(6, "epic6", "epic6", null, null);
 
 
         manager.addAnyTypeOfTask(task1);
@@ -70,7 +70,7 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
 
         System.out.println("История: " + newManager.historyManager.getHistory().toString());
 
-newManager.getPrioritizedTasks();
+        newManager.getPrioritizedTasks();
     }
 
 
@@ -250,13 +250,13 @@ newManager.getPrioritizedTasks();
 
         switch (Type.valueOf(value[1])) {
             case TASK:
-                 addAnyTypeOfTask(new Task(Long.parseLong(value[0]), value[2], value[4], Status.valueOf(value[3]),
-                        Duration.ofSeconds(Long.parseLong(value[5])), LocalDate.parse(value[6], Task.dateTimeFormatter)));                                                                  //!!!!!
+                addAnyTypeOfTask(new Task(Long.parseLong(value[0]), value[2], value[4], Status.valueOf(value[3]),
+                        Duration.ofSeconds(Long.parseLong(value[5])), LocalDateTime.parse(value[6], Task.dateTimeFormatter)));                                                                  //!!!!!
                 break;
             case SUBTASK:
                 addAnyTypeOfTask(new SubTask(Long.parseLong(value[0]), value[2], value[4], Status.valueOf(value[3]),
                         Duration.ofSeconds(Long.parseLong(value[5])),
-                        LocalDate.parse(value[6], Task.dateTimeFormatter)));
+                        LocalDateTime.parse(value[6], Task.dateTimeFormatter)));
         }
 
     }

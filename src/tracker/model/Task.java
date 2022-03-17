@@ -2,20 +2,20 @@ package tracker.model;
 
 
 import java.time.Duration;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Task {
-    public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yy");
+    public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
 
     protected Status status;
     protected String Name;
     protected String Description;
     protected Long taskId;
     protected Duration duration;
-    protected LocalDate localDate;
+    protected LocalDateTime localDate;
 
-    public Task(long id, String Name, String Description, Status status, Duration duration, LocalDate localDate) {
+    public Task(long id, String Name, String Description, Status status, Duration duration, LocalDateTime localDate) {
         this.taskId = id;
         this.Name = Name;
         this.Description = Description;
@@ -28,7 +28,11 @@ public class Task {
         this.taskId = id;
         this.Name = Name;
         this.Description = Description;
-        this.status = status;
+        if (status == null) {
+            this.status = Status.NEW;
+        } else {
+            this.status = status;
+        }
     }
 
     public Long getTaskId() {
@@ -59,7 +63,7 @@ public class Task {
         return duration;
     }
 
-    public LocalDate getLocalDate() {
+    public LocalDateTime getLocalDate() {
         return localDate;
     }
 

@@ -1,12 +1,14 @@
 package tracker.service.manager.inMemoryManager;
 
 import tracker.model.Epic;
-import tracker.model.Status;
 import tracker.model.SubTask;
 import tracker.model.Task;
 import tracker.service.manager.TaskManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.TreeSet;
 
 public class InMemoryTasksManager implements TaskManager {
     public InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
@@ -75,6 +77,8 @@ public class InMemoryTasksManager implements TaskManager {
             return;
         }
 
+        doTheyOverlapInTime(task);
+
         if (task.getClass() == Task.class) {
             tasks.put(task.getTaskId(), task);
         }
@@ -92,34 +96,28 @@ public class InMemoryTasksManager implements TaskManager {
 
     @Override
     public void updateTask(Task task) {
+
+        doTheyOverlapInTime(task);
+
         if (task.getClass() == Task.class) {
             tasks.put(task.getTaskId(), task);
         }
 
         if (task.getClass() == Epic.class) {
             epics.put(task.getTaskId(), (Epic) task);
-            ArrayList<SubTask> subT = ((Epic) task).getSubTasks();
-            boolean isDone = true;
-            int numOfDone = 0;
-            for (SubTask i : subT) {
-                if (i.getStatus() == Status.valueOf("NEW")) {
-                    isDone = false;
-                } else {
-                    numOfDone += 1;
-                }
-            }
-            if (isDone) {
-                task.setStatus(Status.DONE);
-            } else if (numOfDone == 0) {
-                task.setStatus(Status.NEW);
-            } else {
-                task.setStatus(Status.IN_PROGRESS);
-            }
+            ((Epic) task).calculateStatus();
         }
 
         if (task.getClass() == SubTask.class) {
             subtasks.put(task.getTaskId(), (SubTask) task);
+            epics.values().forEach(task1 -> {
+                if (task1.getSubTasks().contains(task)) {
+                    task1.calculateStatus();
+                    return;
+                }
+            });
         }
+
     }
 
     @Override
@@ -186,5 +184,21 @@ public class InMemoryTasksManager implements TaskManager {
 
     public void getPrioritizedTasks() {
         System.out.println(sortedTasks);
+    }
+
+    //проверяет на пересечение по времени исполнения
+    public void doTheyOverlapInTime(Task task) throws IllegalArgumentException {
+        if (task.getClass() == Epic.class) {
+            return;
+        }
+
+        sortedTasks.forEach(task1 -> {
+                    if (task.getLocalDate().plus(task.getDuration()).isAfter(task1.getLocalDate()) &&
+                            task.getLocalDate().isBefore(task1.getLocalDate()) ||
+                            task.getLocalDate().isEqual(task1.getLocalDate())) {
+                        throw new IllegalArgumentException("Таски пересекаются по времени выполнения"); //выбрасывает ошибку, если таски пересекаются во времени
+                    }
+                }
+        );
     }
 }
