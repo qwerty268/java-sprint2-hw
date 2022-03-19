@@ -11,69 +11,6 @@ import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTasksManager {
 
-    public static void main(String[] args) {
-        FileBackedTasksManager manager = new FileBackedTasksManager(new File("info"));
-
-
-        Task task1 = new Task(1, "task1", "task1", Status.DONE, Duration.ofSeconds(10),
-                LocalDateTime.of(2017, 11, 11, 1, 1));
-
-        Task task2 = new Task(2, "task2", "task2", Status.DONE, Duration.ofSeconds(10),
-                LocalDateTime.of(2018, 11, 11, 1, 1));
-
-
-        SubTask subTask3 = new SubTask(3, "subTask3", "subtask3", Status.DONE, Duration.ofSeconds(10),
-                LocalDateTime.of(2019, 11, 11, 1, 1));
-
-        SubTask subTask4 = new SubTask(4, "subTask4", "subTask4", Status.DONE, Duration.ofSeconds(10),
-                LocalDateTime.of(2010, 11, 11, 1, 1));
-
-        SubTask subTask5 = new SubTask(5, "subTask5", "subTask5", Status.DONE, Duration.ofSeconds(10),
-                LocalDateTime.of(2015, 11, 11, 1, 1));
-
-        Epic epic0 = new Epic(0, "epic0", "epic0", null,
-                new ArrayList<>(List.of(subTask3, subTask4, subTask5)));
-
-        Epic epic6 = new Epic(6, "epic6", "epic6", null, null);
-
-
-        manager.addAnyTypeOfTask(task1);
-        manager.addAnyTypeOfTask(task2);
-
-        manager.getTask(task1.getTaskId());
-        manager.getTask(task2.getTaskId());
-
-        manager.addAnyTypeOfTask(subTask3);
-        manager.addAnyTypeOfTask(subTask4);
-        manager.addAnyTypeOfTask(subTask5);
-
-        manager.addAnyTypeOfTask(epic0);
-        manager.addAnyTypeOfTask(epic6);
-
-        manager.getSubTask(3);
-        manager.getSubTask(4);
-        manager.getSubTask(5);
-        manager.getEpic(0);
-        manager.getEpic(6);
-
-
-        System.out.println("Все таски: " + manager.getTasks().toString() + " " + manager.getEpics().toString() + " " +
-                manager.getSubtasks().toString());
-
-        System.out.println("История: " + manager.historyManager.getHistory().toString());
-        System.out.println();
-
-        FileBackedTasksManager newManager = FileBackedTasksManager.loadFromFile(new File("info"));
-
-        System.out.println("Все таски: " + newManager.getTasks().toString() + " " + newManager.getEpics().toString() +
-                " " + newManager.getSubtasks().toString());
-
-        System.out.println("История: " + newManager.historyManager.getHistory().toString());
-
-        newManager.getPrioritizedTasks();
-    }
-
-
     private final File file;
 
     public FileBackedTasksManager(File file) {

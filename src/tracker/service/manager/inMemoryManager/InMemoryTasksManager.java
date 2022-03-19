@@ -99,18 +99,21 @@ public class InMemoryTasksManager implements TaskManager {
     @Override
     public void updateTask(Task task) {
 
-        doTheyOverlapInTime(task);
 
         if (task.getClass() == Task.class) {
+            sortedTasks.remove(tasks.get(task.getTaskId()));
+
             tasks.put(task.getTaskId(), task);
         }
 
         if (task.getClass() == Epic.class) {
+            sortedTasks.remove(epics.get(task.getTaskId()));
             epics.put(task.getTaskId(), (Epic) task);
             ((Epic) task).calculateStatus();
         }
 
         if (task.getClass() == SubTask.class) {
+            sortedTasks.remove(subtasks.get(task.getTaskId()));
             subtasks.put(task.getTaskId(), (SubTask) task);
             epics.values().forEach(task1 -> {
                 if (task1.getSubTasks().contains(task)) {

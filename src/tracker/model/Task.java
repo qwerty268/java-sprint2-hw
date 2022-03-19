@@ -24,7 +24,7 @@ public class Task {
         this.localDate = localDate;
     }
 
-    public Task(long id, String Name, String Description, Status status) {
+    protected Task(long id, String Name, String Description, Status status) { //для эпиков
         this.taskId = id;
         this.Name = Name;
         this.Description = Description;
