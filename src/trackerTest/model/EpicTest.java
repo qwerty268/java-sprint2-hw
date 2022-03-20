@@ -83,4 +83,13 @@ class EpicTest {
 
         Assertions.assertEquals(epic0.getStatus(), Status.IN_PROGRESS);
     }
+
+    @Test
+    public void createEpicWithOutSubTasks() {
+        Epic epic0 = new Epic(0, "epic0", "epic0", null,
+                null);
+
+        Assertions.assertNull(epic0.getSubTasks());
+        Assertions.assertEquals(epic0.getStatus(), Status.NEW);
+    }
 }
