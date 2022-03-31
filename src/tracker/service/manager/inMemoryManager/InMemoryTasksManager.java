@@ -5,13 +5,10 @@ import tracker.model.SubTask;
 import tracker.model.Task;
 import tracker.service.manager.TaskManager;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.TreeSet;
+import java.util.*;
 
 public class InMemoryTasksManager implements TaskManager {
-    public InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
+    protected InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
 
     final protected HashMap<Long, Task> tasks = new HashMap<>();
@@ -26,6 +23,7 @@ public class InMemoryTasksManager implements TaskManager {
 
     final protected TreeSet<Task> sortedTasks = new TreeSet<>(comparator);
 
+    @Override
     public ArrayList<Task> getTasks() {
         ArrayList<Task> arrayOfTasks = new ArrayList<>();
 
@@ -187,6 +185,17 @@ public class InMemoryTasksManager implements TaskManager {
 
     }
 
+    @Override
+    public void deleteTasks() {
+        tasks.clear();
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
+
+    @Override
     public void getPrioritizedTasks() {
         System.out.println(sortedTasks);
     }

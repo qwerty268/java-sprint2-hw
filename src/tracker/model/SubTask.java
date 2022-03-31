@@ -1,5 +1,6 @@
 package tracker.model;
 
+import com.google.gson.Gson;
 import java.time.Duration;
 import java.time.LocalDateTime;
 

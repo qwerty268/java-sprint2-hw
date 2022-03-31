@@ -2,20 +2,33 @@ package tracker.service.manager;
 
 import tracker.model.Task;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public interface TaskManager {
 
+    //возвращает спсок задач
+    ArrayList<Task> getTasks();
 
     //добавляет задачу любого типа
-    public void addAnyTypeOfTask(Task task);
+    void addAnyTypeOfTask(Task task);
 
     //обновляет задачу любого вида
-    public void updateTask(Task task);
+    void updateTask(Task task);
 
     //удаляет все задачи
-    public void deleteAll();
+    void deleteAll();
 
     //удаляет задачу любого типа по индексу
-    public void deleteByIndex(long index);
+    void deleteByIndex(long index);
 
-    //возвращает истоирю последних 10 просмотренных задач
+    //возвращает задачи, отсортированные по времени
+    void getPrioritizedTasks();
+
+    //возвращает историю вызова задач
+    List<Task> getHistory();
+
+    //удаляет задачи
+    void deleteTasks();
+
 }

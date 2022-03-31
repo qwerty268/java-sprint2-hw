@@ -11,7 +11,7 @@ import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTasksManager {
 
-    private final File file;
+    protected final File file;
 
     public FileBackedTasksManager(File file) {
         this.file = file;
@@ -60,6 +60,12 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
         historyManager.add(epics.get(epicId));
         save();
         return epics.get(epicId);
+    }
+
+    @Override
+    public void deleteTasks() {
+        super.deleteTasks();
+        save();
     }
 
     public static FileBackedTasksManager loadFromFile(File newFile) {
