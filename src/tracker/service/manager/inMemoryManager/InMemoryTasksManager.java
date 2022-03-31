@@ -61,6 +61,7 @@ public class InMemoryTasksManager implements TaskManager {
         return arrayOfEpics;
     }
 
+    @Override
     public ArrayList<SubTask> getSubTasksOfEpic(Long epicId) {
         if (epics.get(epicId) == null) {
             return null;
@@ -188,6 +189,11 @@ public class InMemoryTasksManager implements TaskManager {
     @Override
     public void deleteTasks() {
         tasks.clear();
+    }
+
+    @Override
+    public void deleteSubTasks() {
+        subtasks.clear();
     }
 
     @Override
