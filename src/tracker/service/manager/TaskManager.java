@@ -35,6 +35,9 @@ public interface TaskManager {
     //удаляет подзажачи
     void deleteSubTasks();
 
+    //удаляет эпики
+    void deleteEpics();
+
     //возвращет сабы эпика
     ArrayList<SubTask> getSubTasksOfEpic(Long epicId);
 
