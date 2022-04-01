@@ -153,7 +153,7 @@ public class InMemoryTasksManager implements TaskManager {
 
             for (Task subTask : epics.get(index).getSubTasks()) {
                 subtasks.remove(subTask.getTaskId());
-                sortedTasks.remove(subTask.getTaskId());
+                sortedTasks.remove(subTask);
             }
 
             epics.get(index).clearSubTasks();
@@ -188,21 +188,25 @@ public class InMemoryTasksManager implements TaskManager {
 
     @Override
     public void deleteTasks() {
-        for (Task task: tasks.values()) {
+        HashMap<Long, Task> tasksClone = (HashMap<Long, Task>) tasks.clone();
+        for (Task task: tasksClone.values()) {
             deleteByIndex(task.getTaskId());
         }
     }
 
     @Override
     public void deleteSubTasks() {
-        for (SubTask subTask: subtasks.values()) {
-            deleteByIndex(subTask.getTaskId());
-        }
+        HashMap<Long, SubTask> subsClone = (HashMap<Long, SubTask>) subtasks.clone();
+            for (SubTask subTask : subsClone.values()) {
+                    deleteByIndex(subTask.getTaskId());
+            }
     }
 
     @Override
     public void deleteEpics() {
-        for (Epic epic: epics.values()) {
+
+        HashMap<Long, Epic> epicsClone = (HashMap<Long, Epic>) epics.clone();
+        for (Epic epic: epicsClone.values()) {
             deleteByIndex(epic.getTaskId());
         }
     }

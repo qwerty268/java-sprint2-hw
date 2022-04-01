@@ -47,7 +47,11 @@ public class LinkedList {
 
     public void removeNode(long id) {
         Node node = nodes.get(id);
+        if (node == null) {
+            return;
+        }
         nodes.remove(id);
+
 
         // если lastNode заменить на previousNode, то в методе linkedLast, при создании нового узла, за место предыдущего будет передан null
         if (lastNode == node) {

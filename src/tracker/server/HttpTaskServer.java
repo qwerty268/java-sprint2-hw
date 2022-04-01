@@ -56,22 +56,22 @@ public class HttpTaskServer {
     }
 
     private void handle(HttpExchange h) throws IOException {
+        System.out.println(h.getRequestURI());
+        String pathOfRequest = h.getRequestURI().toString();
 
-        String pathOfRequest = h.getRequestURI().getPath();
-        if (pathOfRequest.contains("tasks/task/&d=")) {
+        if (pathOfRequest.contains("/tasks/task/?d=")) { //++
             try {
 
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
                         .create();
 
-                String path = h.getRequestURI().getPath();
-                String id = path.substring(path.indexOf('='));
+                String id = pathOfRequest.substring(pathOfRequest.indexOf('=') + 1);
 
                 switch (h.getRequestMethod()) {
                     case "GET":
 
-                        Task task = getTaskById(Integer.parseInt(id));
+                        Task task = taskManager.getTask(Integer.parseInt(id));
 
                         String response = gson.toJson(task);
 
@@ -96,7 +96,7 @@ public class HttpTaskServer {
                 h.close();
                 return;
             }
-        } else if (pathOfRequest.contains("tasks/task/")) {
+        } else if (pathOfRequest.contains("tasks/task/")) { //++
             try {
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
@@ -139,16 +139,14 @@ public class HttpTaskServer {
                 h.close();
                 return;
             }
-        } else if (pathOfRequest.contains("tasks/subtask/epic/?d=")) {
+        } else if (pathOfRequest.contains("tasks/subtask/epic/?d=")) { //++
             try {
-
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
                         .create();
                 switch (h.getRequestMethod()) {
-                    case "GET":
-                        String path = h.getRequestURI().getPath();
-                        String id = path.substring(path.indexOf('='));
+                    case "GET": ;
+                        String id = pathOfRequest.substring(pathOfRequest.indexOf('=') + 1);
 
                         List<SubTask> subTasks = taskManager.getSubTasksOfEpic(Long.parseLong(id));
                         String response = gson.toJson(subTasks);
@@ -166,15 +164,14 @@ public class HttpTaskServer {
                 h.close();
                 return;
             }
-        } else if (pathOfRequest.contains("tasks/subtasks/?d=")) {
+        } else if (pathOfRequest.contains("tasks/subtasks/?d=")) { //++
             try {
 
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
                         .create();
 
-                String path = h.getRequestURI().getPath();
-                String id = path.substring(path.indexOf('='));
+                String id = pathOfRequest.substring(pathOfRequest.indexOf('=') + 1);
 
                 switch (h.getRequestMethod()) {
                     case "GET":
@@ -193,7 +190,7 @@ public class HttpTaskServer {
 
                         h.sendResponseHeaders(200, 0);
                         try (OutputStream os = h.getResponseBody()) {
-                            os.write("Задача удалена".getBytes(DEFAULT_CHARSET));
+                            os.write("Подзадача удалена".getBytes(DEFAULT_CHARSET));
                         }
                         break;
                     default:
@@ -204,7 +201,7 @@ public class HttpTaskServer {
                 h.close();
                 return;
             }
-        } else if (pathOfRequest.contains("tasks/subtasks/")) {
+        } else if (pathOfRequest.contains("tasks/subtasks/")) { //
             try {
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
@@ -247,7 +244,7 @@ public class HttpTaskServer {
                 h.close();
                 return;
             }
-        } else if (pathOfRequest.contains("tasks/epic/")) {
+        } else if (pathOfRequest.contains("tasks/epic/")) { //
             try {
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
@@ -268,7 +265,7 @@ public class HttpTaskServer {
 
                         h.sendResponseHeaders(200, 0);
                         try (OutputStream os = h.getResponseBody()) {
-                            os.write("Все подзадачи удалены".getBytes(DEFAULT_CHARSET));
+                            os.write("Все епики удалены".getBytes(DEFAULT_CHARSET));
                         }
                         break;
                     case "POST":
@@ -290,10 +287,8 @@ public class HttpTaskServer {
                 h.close();
                 return;
             }
-        } else if (pathOfRequest.contains("tasks/history")) {
+        } else if (pathOfRequest.contains("tasks/history")) { //+
             try {
-
-
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
                         .serializeNulls()

@@ -1,5 +1,4 @@
 id,type,name,status,description,epic,duration,LocalDate
-1,TASK,task1,NEW,task1Test,0,31.12.99 23:59
 0,EPIC,epic0,DONE,epic0,3,4
 3,SUBTASK,subTask3,DONE,subtask3,10,11.11.19 01:01
 4,SUBTASK,subTask4,DONE,subTask4,10,11.11.10 01:01
