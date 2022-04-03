@@ -23,11 +23,16 @@ public class HttpTaskServer {
     private HttpServer server;
     private static final int PORT = 8080;
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+    private static KVServer kvServer;
 
     private static HttpTaskManager taskManager;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
+        kvServer = new KVServer();
+        kvServer.start();
+
         taskManager = new HttpTaskManager(new File("info"));
+
         Task task1 = new Task(1, "task1", "task1Test", Status.NEW, Duration.ZERO, LocalDateTime.MAX);
 
         SubTask subTask3 = new SubTask(3, "subTask3", "subtask3", Status.DONE, Duration.ofSeconds(10),
@@ -44,7 +49,6 @@ public class HttpTaskServer {
         taskManager.addAnyTypeOfTask(subTask4);
         taskManager.addAnyTypeOfTask(epic0);
 
-        HttpTaskServer httpTaskServer = new HttpTaskServer();
     }
 
     public HttpTaskServer() throws IOException {
@@ -59,7 +63,7 @@ public class HttpTaskServer {
         System.out.println(h.getRequestURI());
         String pathOfRequest = h.getRequestURI().toString();
 
-        if (pathOfRequest.contains("/tasks/task/?d=")) { //++
+        if (pathOfRequest.contains("/tasks/task/?id=")) { //++
             try {
 
                 Gson gson = new GsonBuilder()
@@ -139,13 +143,13 @@ public class HttpTaskServer {
                 h.close();
                 return;
             }
-        } else if (pathOfRequest.contains("tasks/subtask/epic/?d=")) { //++
+        } else if (pathOfRequest.contains("tasks/subtask/epic/?id=")) { //++
             try {
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
                         .create();
                 switch (h.getRequestMethod()) {
-                    case "GET": ;
+                    case "GET":
                         String id = pathOfRequest.substring(pathOfRequest.indexOf('=') + 1);
 
                         List<SubTask> subTasks = taskManager.getSubTasksOfEpic(Long.parseLong(id));
@@ -157,14 +161,14 @@ public class HttpTaskServer {
                         }
                         break;
                     default:
-                        System.out.println("tasks/subtask/epic/?d= ждёт GET-запрос, а получил " + h.getRequestMethod());
+                        System.out.println("tasks/subtask/epic/?id= ждёт GET-запрос, а получил " + h.getRequestMethod());
                         h.sendResponseHeaders(405, 0);
                 }
             } finally {
                 h.close();
                 return;
             }
-        } else if (pathOfRequest.contains("tasks/subtasks/?d=")) { //++
+        } else if (pathOfRequest.contains("tasks/subtasks/?id=")) { //++
             try {
 
                 Gson gson = new GsonBuilder()
@@ -194,7 +198,7 @@ public class HttpTaskServer {
                         }
                         break;
                     default:
-                        System.out.println("tasks/subtasks/?d= ждёт GET/DELETE-запрос, а получил " + h.getRequestMethod());
+                        System.out.println("tasks/subtasks/?id= ждёт GET/DELETE-запрос, а получил " + h.getRequestMethod());
                         h.sendResponseHeaders(405, 0);
                 }
             } finally {

@@ -14,6 +14,7 @@ public class Task {
     protected Long taskId;
     protected Duration duration;
     protected LocalDateTime localDate;
+    protected Type type = Type.TASK;
 
     public Task(long id, String Name, String Description, Status status, Duration duration, LocalDateTime localDate) {
         this.taskId = id;
@@ -22,7 +23,11 @@ public class Task {
         this.status = status;
         this.duration = duration;
         this.localDate = localDate;
+        if (this instanceof SubTask) {
+            this.type = Type.SUBTASK;
+        }
     }
+
 
     protected Task(long id, String Name, String Description, Status status) { //для эпиков
         this.taskId = id;
@@ -33,6 +38,7 @@ public class Task {
         } else {
             this.status = status;
         }
+        this.type = Type.EPIC;
     }
 
     public Long getTaskId() {

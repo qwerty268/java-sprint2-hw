@@ -1,10 +1,15 @@
 package tracker.server;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +17,7 @@ import java.util.Map;
  * Постман: https://www.getpostman.com/collections/a83b61d9e1c81c10575c
  */
 public class KVServer {
-    public static final int PORT = 8078;
+    public static final int PORT = 8008;
     private final String API_KEY;
     private HttpServer server;
     private Map<String, String> data = new HashMap<>();
@@ -71,6 +76,37 @@ public class KVServer {
         });
         server.createContext("/load", (h) -> {
             // TODO Добавьте получение значения по ключу
+            try {
+                System.out.println("\n/load");
+                if (!hasAuth(h)) {
+                    System.out.println("Запрос неавторизован, нужен параметр в query API_KEY со значением апи-ключа");
+                    h.sendResponseHeaders(403, 0);
+                    return;
+                }
+                switch (h.getRequestMethod()) {
+                    case "GET":
+                        String key = h.getRequestURI().getPath().substring("/load/".length());
+                        if (key.isEmpty()) {
+                            System.out.println("Key для сохранения пустой. key указывается в пути: /load/{key}");
+                            h.sendResponseHeaders(400, 0);
+                            return;
+                        }
+
+
+                        System.out.println("Значение для ключа " + key + " успешно отправлено!");
+
+                        h.sendResponseHeaders(200, 0);
+                        try (OutputStream os = h.getResponseBody()) {
+                            os.write(data.get(key).getBytes(StandardCharsets.UTF_8));
+                        }
+                        break;
+                    default:
+                        System.out.println("/load ждёт GET-запрос, а получил: " + h.getRequestMethod());
+                        h.sendResponseHeaders(405, 0);
+                }
+            } finally {
+                h.close();
+            }
         });
     }
 
@@ -96,7 +132,7 @@ public class KVServer {
 
     protected void sendText(HttpExchange h, String text) throws IOException {
         //byte[] resp = jackson.writeValueAsBytes(obj);
-        byte[] resp = text.getBytes("UTF-8");
+        byte[] resp = text.getBytes(StandardCharsets.UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json");
         h.sendResponseHeaders(200, resp.length);
         h.getResponseBody().write(resp);
