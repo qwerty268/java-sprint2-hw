@@ -78,4 +78,9 @@ public class Task {
         return String.join(",", taskId + "", Type.TASK + "", Name, status + "", Description,
                 duration.getSeconds() + "", localDate.format(dateTimeFormatter));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.taskId == ((Task) obj).taskId;
+    }
 }

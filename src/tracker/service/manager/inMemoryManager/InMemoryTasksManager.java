@@ -11,17 +11,19 @@ public class InMemoryTasksManager implements TaskManager {
     protected InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
 
-    final protected HashMap<Long, Task> tasks = new HashMap<>();
-    final protected HashMap<Long, Epic> epics = new HashMap<>();
-    final protected HashMap<Long, SubTask> subtasks = new HashMap<>();
+    protected HashMap<Long, Task> tasks = new HashMap<>();
+    protected HashMap<Long, Epic> epics = new HashMap<>();
+    protected HashMap<Long, SubTask> subtasks = new HashMap<>();
 
     private final Comparator<Task> comparator = (Task task1, Task task2) -> {
         if (task1.getLocalDate().isBefore(task2.getLocalDate())) {
             return 1;
+        } else if (task1.getTaskId() == task2.getTaskId()) {
+            return 0;
         } else return -1;
     };
 
-    final protected TreeSet<Task> sortedTasks = new TreeSet<>(comparator);
+    protected TreeSet<Task> sortedTasks = new TreeSet<>(comparator);
 
     @Override
     public ArrayList<Task> getTasks() {

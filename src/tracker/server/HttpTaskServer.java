@@ -1,59 +1,30 @@
 package tracker.server;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import tracker.model.Epic;
-import tracker.model.Status;
 import tracker.model.SubTask;
 import tracker.model.Task;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HttpTaskServer {
     private HttpServer server;
     private static final int PORT = 8080;
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-    private static KVServer kvServer;
 
     private static HttpTaskManager taskManager;
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        kvServer = new KVServer();
-        kvServer.start();
-
-        taskManager = new HttpTaskManager(new File("info"));
-
-        Task task1 = new Task(1, "task1", "task1Test", Status.NEW, Duration.ZERO, LocalDateTime.MAX);
-
-        SubTask subTask3 = new SubTask(3, "subTask3", "subtask3", Status.DONE, Duration.ofSeconds(10),
-                LocalDateTime.of(2019, 11, 11, 1, 1));
-
-        SubTask subTask4 = new SubTask(4, "subTask4", "subTask4", Status.DONE, Duration.ofSeconds(10),
-                LocalDateTime.of(2010, 11, 11, 1, 1));
-
-        Epic epic0 = new Epic(0, "epic0", "epic0", null,
-                new ArrayList<>(List.of(subTask3, subTask4)));
-
-        taskManager.addAnyTypeOfTask(task1);
-        taskManager.addAnyTypeOfTask(subTask3);
-        taskManager.addAnyTypeOfTask(subTask4);
-        taskManager.addAnyTypeOfTask(epic0);
-
-    }
-
-    public HttpTaskServer() throws IOException {
+    public HttpTaskServer(HttpTaskManager taskManager) throws IOException {
+        this.taskManager = taskManager;
         server = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
-
         server.createContext("/tasks", this::handle);
 
         server.start();
@@ -344,5 +315,9 @@ public class HttpTaskServer {
             task = taskManager.getTask(id);
         }
         return task;
+    }
+
+    public void stop() {
+        server.stop(0);
     }
 }
