@@ -71,7 +71,7 @@ public class HttpTaskServer {
                 h.close();
                 return;
             }
-        } else if (pathOfRequest.contains("tasks/task/")) { //++
+        } else if (pathOfRequest.contains("/tasks/task/")) { //++
             try {
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
@@ -114,7 +114,7 @@ public class HttpTaskServer {
                 h.close();
                 return;
             }
-        } else if (pathOfRequest.contains("tasks/subtask/epic/?id=")) { //++
+        } else if (pathOfRequest.contains("/tasks/subtask/epic/?id=")) { //++
             try {
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
@@ -139,7 +139,7 @@ public class HttpTaskServer {
                 h.close();
                 return;
             }
-        } else if (pathOfRequest.contains("tasks/subtasks/?id=")) { //++
+        } else if (pathOfRequest.contains("/tasks/subtasks/?id=")) { //++
             try {
 
                 Gson gson = new GsonBuilder()
@@ -176,7 +176,7 @@ public class HttpTaskServer {
                 h.close();
                 return;
             }
-        } else if (pathOfRequest.contains("tasks/subtasks/")) { //
+        } else if (pathOfRequest.contains("/tasks/subtasks/")) { //
             try {
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
@@ -219,7 +219,7 @@ public class HttpTaskServer {
                 h.close();
                 return;
             }
-        } else if (pathOfRequest.contains("tasks/epic/")) { //
+        } else if (pathOfRequest.contains("/tasks/epic/")) { //
             try {
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
@@ -262,7 +262,7 @@ public class HttpTaskServer {
                 h.close();
                 return;
             }
-        } else if (pathOfRequest.contains("tasks/history")) { //+
+        } else if (pathOfRequest.contains("/tasks/history")) { //+
             try {
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()

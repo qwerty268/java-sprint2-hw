@@ -1,5 +1,7 @@
 package Main.main;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import tracker.model.Epic;
 import tracker.model.Status;
 import tracker.model.SubTask;
@@ -9,12 +11,9 @@ import tracker.server.HttpTaskServer;
 import tracker.server.KVServer;
 import tracker.service.manager.Managers;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -33,12 +32,17 @@ public class Main {
                 LocalDateTime.of(2010, 11, 11, 1, 1));
 
         Epic epic0 = new Epic(0, "epic0", "epic0", null,
-                new ArrayList<>(List.of(subTask3, subTask4)));
+                null);
 
         taskManager.addAnyTypeOfTask(task1);
         taskManager.addAnyTypeOfTask(subTask3);
         taskManager.addAnyTypeOfTask(subTask4);
         taskManager.addAnyTypeOfTask(epic0);
 
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                        .create();
+
+        System.out.println(gson.toJson(taskManager.getSubTask(3L)));
     }
 }

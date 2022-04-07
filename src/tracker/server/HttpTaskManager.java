@@ -2,8 +2,6 @@ package tracker.server;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import tracker.model.Epic;
-import tracker.model.SubTask;
 import tracker.model.Task;
 import tracker.service.manager.inMemoryManager.FileBackedTasksManager;
 
@@ -31,29 +29,11 @@ public class HttpTaskManager extends FileBackedTasksManager {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
+
         client.put(id + "", gson.toJson(this));
     }
 
-    @Override
-    public Task getTask(long taskId) {
-        Task task = super.getTask(taskId);
-        save();
-        return task;
-    }
 
-    @Override
-    public SubTask getSubTask(long subTaskId) {
-        SubTask subTask = super.getSubTask(subTaskId);
-        save();
-        return subTask;
-    }
-
-    @Override
-    public Epic getEpic(long epicId) {
-        Epic epic = super.getEpic(epicId);
-        save();
-        return epic;
-    }
 
 
     public void loadFromServer() {

@@ -314,7 +314,6 @@ class HttpTaskServerTest {
 
         taskManager.getTask(1);
 
-
         try {
             HttpClient client = HttpClient.newHttpClient();
             URI url = URI.create("http://localhost:8080/tasks/history/");
