@@ -14,6 +14,8 @@ import tracker.service.manager.Managers;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -32,17 +34,12 @@ public class Main {
                 LocalDateTime.of(2010, 11, 11, 1, 1));
 
         Epic epic0 = new Epic(0, "epic0", "epic0", null,
-                null);
+             new ArrayList<>(List.of(subTask3, subTask4)));
 
         taskManager.addAnyTypeOfTask(task1);
         taskManager.addAnyTypeOfTask(subTask3);
         taskManager.addAnyTypeOfTask(subTask4);
         taskManager.addAnyTypeOfTask(epic0);
 
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                        .create();
-
-        System.out.println(gson.toJson(taskManager.getSubTask(3L)));
     }
 }
